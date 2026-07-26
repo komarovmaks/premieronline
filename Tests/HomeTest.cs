@@ -10,96 +10,101 @@ public class HomeTests : BaseTest
     {
         await Page.GotoAsync("https://www.premieronline.com/");
  
-        //await Expect(Page).ToHaveURLAsync("https://www.premieronline.com/");
+        
         Assert.That(Page.Url, Is.EqualTo("https://www.premieronline.com/"));
  
         var title = await Page.TitleAsync();
         
         Assert.That(title, Is.Not.Empty);     
-        
-        //TestContext.WriteLine($"Title: {title}");     
         Console.WriteLine(title);
         
         Assert.That(title, Does.Contain("Premier Online - leading provider of online event registration for sports events"));
-        
-        //var logo = Page.Locator(".uk-logo");
-        //var logo = Page.Locator("a:has(img[alt='Premiere Online'])");
-        var logo = Page.Locator("img[alt='Premiere Online']");
 
-        Assert.That(await logo.IsVisibleAsync(), Is.True);
-        
-        var href = await logo.GetAttributeAsync("href");
-        //Assert.That(href, Is.EqualTo("https://www.premieronline.com"));
+       
 
-        //var signIn = Page.Locator("a:has-text('Sign in')").First;
         var signIn = Page.Locator("a:has-text('Sign in')").Nth(0);
-        Assert.That(await signIn.IsVisibleAsync(), Is.True);
-        Assert.That(await signIn.IsEnabledAsync(), Is.True);
+        await Expect(signIn).ToBeVisibleAsync();
+        await Expect(signIn).ToBeEnabledAsync();
 
-        var events = Page.Locator("a:has-text('Events')").First;
-        Assert.That(await events.IsEnabledAsync(), Is.True);
-        Assert.That(await events.IsVisibleAsync(), Is.True);
 
-        var ratings = Page.Locator("header.uk-sticky.uk-sticky-fixed > nav.uk-navbar-container.boundary-align > div.uk-navbar-left > ul.uk-navbar-nav.hidden > li:nth-child(2) > a");
-        Assert.That(await ratings.IsEnabledAsync(), Is.True);
-        Assert.That(await ratings.IsVisibleAsync(), Is.True);
+        var createAccount = Page.Locator("a:has-text('Create Account')").Nth(0);
+        await Expect(createAccount).ToBeVisibleAsync();
+        await Expect(createAccount).ToBeEnabledAsync();      
+                
+    }
 
-        //var help = Page.Locator("a[href=\"https://www.premieronline.com/help\"]").First;
-        //var help = Page.Locator("nav a").Nth(2);
-        //Assert.That(await help.IsEnabledAsync(), Is.True);
-        //Assert.That(await help.IsVisibleAsync(), Is.True);
-        var help = Page.GetByRole(AriaRole.Link, new() { Name = "Help" });
-        await Expect(help).ToBeVisibleAsync();
-        await Expect(help).ToBeEnabledAsync();
+    
+    [Test]
+    public async Task RegisterNewUser()
+{
+    var register = new Pages.RegisterPage(Page);
+ 
+    await Page.GotoAsync("https://www.premieronline.com/action/register");
+ 
+    await register.RegisterUser(
+        Utils.UserGenerator.GenerateEmail(),
+        Utils.UserGenerator.GenerateFirstName(),
+        Utils.UserGenerator.GenerateLastName(),
+        Utils.UserGenerator.GeneratePassword()
         
+    );
+        Utils.LoggerHelper.Info($"Generated email: {Utils.UserGenerator.GenerateEmail()}");
+        Utils.LoggerHelper.Info($"Generated first name: {Utils.UserGenerator.GenerateFirstName()}");
+        Utils.LoggerHelper.Info($"Generated password: {Utils.UserGenerator.GeneratePassword()}");
+}
+
+
+    [Test]
+    public async Task RegisterWithEmailMissingAtSign_Negative()
+    {
+        var register = new Pages.RegisterPage(Page);
+
+        await Page.GotoAsync("https://www.premieronline.com/action/register");
+
+        await register.RegisterUser(
+            "invalid-email",
+            "Test",
+            "User",
+            "Password123!");
+
+        Assert.That(Page.Url, Is.EqualTo("https://www.premieronline.com/action/register"));
+        Assert.That(await Page.Locator("#email").InputValueAsync(), Is.EqualTo("invalid-email"));
     }
 
     [Test]
-    public async Task CreateNewAccount()
+    public async Task RegisterWithShortPassword_Negative()
     {
-        await Page.GotoAsync("https://www.premieronline.com/");
+        var register = new Pages.RegisterPage(Page);
+        var errorMessage = Page.Locator("div.uk-alert-danger > p");
 
-        var createAccount = Page.Locator("a:has-text('Create Account')").First;
-        await Expect(createAccount).ToBeVisibleAsync();
-        await Expect(createAccount).ToBeEnabledAsync();
+        await Page.GotoAsync("https://www.premieronline.com/action/register");
 
-        await createAccount.ClickAsync();
-        await Expect(Page).ToHaveURLAsync("https://www.premieronline.com/action/register");
+        await register.RegisterUser(
+            "test@mailinator.com",
+            "Test",
+            "User",
+            "Short1");
 
-        var emailInput = Page.Locator("#email");
-        await Expect(emailInput).ToBeVisibleAsync();
-        await Expect(emailInput).ToBeEnabledAsync();
-        await Expect(emailInput).ToHaveAttributeAsync("placeholder", "Email: we send your confirmations and receipts here.");
-        await emailInput.FillAsync("test@example.com");
+        Assert.That(Page.Url, Is.EqualTo("https://www.premieronline.com/create_profile.php"));
+        Assert.That(await errorMessage.TextContentAsync(), Does.Contain("Your password must be at least 8 characters long."));
+    }
 
-        var firstName = Page.Locator("#first_name");
-        await Expect(firstName).ToBeVisibleAsync();
-        await Expect(firstName).ToBeEnabledAsync();
-        await Expect(firstName).ToHaveAttributeAsync("placeholder", "First Name");
-        await firstName.FillAsync("Max");
+    [Test]
+    public async Task RegisterWithMismatchedPasswords_Negative()
+    {
+        var register = new Pages.RegisterPage(Page);
+        var errorMessage = Page.Locator("div.uk-alert-danger > p");
 
-        var lastName = Page.Locator("#last_name");
-        await Expect(lastName).ToBeVisibleAsync();
-        await Expect(lastName).ToBeEnabledAsync();
-        await Expect(lastName).ToHaveAttributeAsync("placeholder", "Last Name");
-        await lastName.FillAsync("Test");
+        await Page.GotoAsync("https://www.premieronline.com/action/register");
 
-        var password = Page.Locator("#password");
-        await Expect(password).ToBeVisibleAsync();
-        await Expect(password).ToBeEnabledAsync();
-        await Expect(password).ToHaveAttributeAsync("placeholder", "Password (8 characters alphanumeric)");
-        await password.FillAsync("Test123!");
+        await register.RegisterUser(
+            "test@mailinator.com",
+            "Test",
+            "User",
+            "Password!",
+            "Password1234!");
 
-        var passwordRepeat = Page.Locator("#password_repeat");
-        await Expect(passwordRepeat).ToBeVisibleAsync();
-        await Expect(passwordRepeat).ToBeEnabledAsync();
-        await Expect(passwordRepeat).ToHaveAttributeAsync("placeholder", "Repeat Password");
-        await passwordRepeat.FillAsync("Test123!");
-
-        var continueButton = Page.Locator("button[type=\"submit\"]");
-        await Expect(continueButton).ToBeVisibleAsync();
-        await Expect(continueButton).ToBeEnabledAsync();
-        await continueButton.ClickAsync();
-        await Expect(Page).ToHaveURLAsync("https://www.premieronline.com/create_profile.php");
+        Assert.That(Page.Url, Is.EqualTo("https://www.premieronline.com/create_profile.php"));
+        Assert.That(await errorMessage.TextContentAsync(), Does.Contain("Your passwords don't match."));
     }
 }

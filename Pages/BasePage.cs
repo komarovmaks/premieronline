@@ -7,7 +7,7 @@ public abstract class BasePage: BaseTest
 
 {
 
-    protected readonly IPage Page;
+    protected new readonly IPage Page;
  
     protected BasePage(IPage page)
 

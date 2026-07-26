@@ -45,7 +45,9 @@ public class RegisterPage : BasePage
 
         string lastName,
 
-        string password)
+        string password,
+
+        string? repeatPassword = null)
 
     {
 
@@ -57,7 +59,7 @@ public class RegisterPage : BasePage
 
         await FillAsync(Password, password);
 
-        await FillAsync(RepeatPassword, password);
+        await FillAsync(RepeatPassword, repeatPassword ?? password);
  
         await ClickAsync(ContinueButton);
 
