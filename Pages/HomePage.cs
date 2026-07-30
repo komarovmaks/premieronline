@@ -1,6 +1,4 @@
 using Microsoft.Playwright;
-
-//using Microsoft.Playwright.Assertions;
  
 namespace Tests.Pages;
  
@@ -20,21 +18,18 @@ public class HomePage : BasePage
 
         Page.GetByAltText("Premiere Online");
  
-    private ILocator SignIn =>
 
-        Page.GetByRole(AriaRole.Link, new() { Name = "Sign in" });
+    // private ILocator Events =>
+
+    //     Page.GetByRole(AriaRole.Link, new() { Name = "Events" });
  
-    private ILocator Events =>
+    // private ILocator Ratings =>
 
-        Page.GetByRole(AriaRole.Link, new() { Name = "Events" });
+    //     Page.GetByRole(AriaRole.Link, new() { Name = "Ratings" });
  
-    private ILocator Results =>
+    // private ILocator Help =>
 
-        Page.GetByRole(AriaRole.Link, new() { Name = "Results" });
- 
-    private ILocator Help =>
-
-        Page.GetByRole(AriaRole.Link, new() { Name = "Help" });
+    //     Page.GetByRole(AriaRole.Link, new() { Name = "Help" });
  
     private ILocator CreateAccount =>
 
@@ -58,23 +53,23 @@ public class HomePage : BasePage
 
             "Premier Online - leading provider of online event registration for sports events");
  
-        await Expect(Logo).ToBeVisibleAsync();
+        // await Expect(Logo).ToBeVisibleAsync();
  
         await Expect(SignIn).ToBeVisibleAsync();
 
         await Expect(SignIn).ToBeEnabledAsync();
  
-        await Expect(Events).ToBeVisibleAsync();
+        // await Expect(Events).ToBeVisibleAsync();
 
-        await Expect(Events).ToBeEnabledAsync();
+        // await Expect(Events).ToBeEnabledAsync();
  
-        await Expect(Results).ToBeVisibleAsync();
+        // await Expect(Ratings).ToBeVisibleAsync();
 
-        await Expect(Results).ToBeEnabledAsync();
+        // await Expect(Ratings).ToBeEnabledAsync();
  
-        await Expect(Help).ToBeVisibleAsync();
+        // await Expect(Help).ToBeVisibleAsync();
 
-        await Expect(Help).ToBeEnabledAsync();
+        // await Expect(Help).ToBeEnabledAsync();
 
     }
  

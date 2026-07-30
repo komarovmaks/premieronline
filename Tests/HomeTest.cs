@@ -2,7 +2,7 @@ using Microsoft.Playwright;
 
  
 namespace Tests.Tests;
- 
+
 public class HomeTests : BaseTest
 {
     [Test]
@@ -22,7 +22,8 @@ public class HomeTests : BaseTest
 
        
 
-        var signIn = Page.Locator("a:has-text('Sign in')").Nth(0);
+        var homePage = new Pages.HomePage(Page);
+        var signIn = homePage.SignIn;
         await Expect(signIn).ToBeVisibleAsync();
         await Expect(signIn).ToBeEnabledAsync();
 

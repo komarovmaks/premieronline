@@ -20,8 +20,6 @@ public class RegisterPage : BasePage
 
     private ILocator LastName => Page.Locator("#last_name");
 
-    private ILocator Password => Page.Locator("#password");
-
     private ILocator RepeatPassword => Page.Locator("#password_repeat");
  
     private ILocator ContinueButton =>

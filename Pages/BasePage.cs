@@ -16,6 +16,9 @@ public abstract class BasePage: BaseTest
         Page = page;
 
     }
+
+    protected ILocator Password => Page.Locator("#password");
+    public ILocator SignIn => Page.GetByRole(AriaRole.Link, new() { Name = "Sign in" });
  
     protected async Task ClickAsync(ILocator locator)
 
