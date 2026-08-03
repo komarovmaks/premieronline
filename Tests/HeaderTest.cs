@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using NUnit.Framework;
 
  
 namespace Tests.Tests;
@@ -11,6 +12,87 @@ public class HeaderTest : BaseTest
         var headerComponents = new Pages.HeaderComponents(Page);
         await headerComponents.Open();
         await headerComponents.VerifyHeaderComponents();
+    }
+
+    [Test]
+    public async Task SearchByEventName()
+    {
+        var headerComponents = new Pages.HeaderComponents(Page);
+        await headerComponents.Open();
+        
+        await headerComponents.VerifySearchVisible();
+        await headerComponents.VerifySearchEnabled();
+        await headerComponents.VerifyPlaceholder("Search by Event Name or Organiser");
+        await headerComponents.VerifyInputType("search");
+
+        await headerComponents.Search(Data.SearchData.ValidEvent);
+        
+        await headerComponents.VerifySearchValue(Data.SearchData.ValidEvent);
+        await headerComponents.VerifyResultsVisible();
+        var count = await headerComponents.GetResultsCount();
+        Assert.That(count, Is.GreaterThan(0), "Expected at least one result for a valid event search.");
+    }
+
+    [Test]
+    public async Task SearchByOrganizer()
+    {
+        var headerComponents = new Pages.HeaderComponents(Page);
+        await headerComponents.Open();
+        
+        await headerComponents.Search(Data.SearchData.ValidOrganizer);
+        await headerComponents.VerifyResultsVisible();
+        var count = await headerComponents.GetResultsCount();
+        Assert.That(count, Is.GreaterThan(0), "Expected at least one result for a valid organizer search.");
+    }
+
+    [Test]
+    public async Task SearchEmpty()
+    {
+        var headerComponents = new Pages.HeaderComponents(Page);
+        await headerComponents.Open();
+        
+        await headerComponents.Search(Data.SearchData.Empty);
+        await headerComponents.VerifySearchValue(Data.SearchData.Empty);
+    }
+
+    [Test]
+    public async Task SearchInvalid()
+    {
+        var headerComponents = new Pages.HeaderComponents(Page);
+        await headerComponents.Open();
+        
+        await headerComponents.Search(Data.SearchData.InvalidSearch);
+        await headerComponents.VerifyNoResults();
+    }
+
+    [Test]
+    public async Task SearchNumbers()
+    {
+        var headerComponents = new Pages.HeaderComponents(Page);
+        await headerComponents.Open();
+        
+        await headerComponents.Search(Data.SearchData.Numbers);
+        await headerComponents.VerifyNoResults();
+    }
+
+    [Test]
+    public async Task SearchWithSpecialCharacters()
+    {
+        var headerComponents = new Pages.HeaderComponents(Page);
+        await headerComponents.Open();
+        
+        await headerComponents.Search(Data.SearchData.SpecialCharacters);
+        await headerComponents.VerifyNoResults();
+    }
+
+    [Test]
+    public async Task SearchWithLongText()
+    {
+        var headerComponents = new Pages.HeaderComponents(Page);
+        await headerComponents.Open();
+        
+        await headerComponents.Search(Data.SearchData.LongText);
+        await headerComponents.VerifyNoResults();
     }
 }
     // public async Task VerifyHeader()
