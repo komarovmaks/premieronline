@@ -46,46 +46,36 @@ public class HeaderComponents : BasePage
     }
  
     public async Task VerifyHeaderComponents()
-
     {
-
-        await Expect(Page).ToHaveURLAsync(Url);
- 
-        await Expect(Logo).ToBeVisibleAsync();
- 
-        await Expect(Events).ToBeVisibleAsync();
-
-        await Expect(Events).ToBeEnabledAsync();
- 
-        await Expect(Ratings).ToBeVisibleAsync();
-
-        await Expect(Ratings).ToBeEnabledAsync();
- 
-        await Expect(Help).ToBeVisibleAsync();
-
-        await Expect(Help).ToBeEnabledAsync();
-
+        await Assertions.Expect(Page).ToHaveURLAsync(Url);
+        await AssertVisibleAsync(Logo, "Logo");
+        await AssertVisibleAsync(Events, "Events link");
+        await Assertions.Expect(Events).ToBeEnabledAsync();
+        await AssertVisibleAsync(Ratings, "Ratings link");
+        await Assertions.Expect(Ratings).ToBeEnabledAsync();
+        await AssertVisibleAsync(Help, "Help link");
+        await Assertions.Expect(Help).ToBeEnabledAsync();
     }
  
     // Search Actions
     public async Task<HeaderComponents> FocusSearch()
     {
-        await Expect(SearchInput).ToBeVisibleAsync();
-        await Expect(SearchInput).ToBeEnabledAsync();
+        await AssertVisibleAsync(SearchInput, "Search Input");
+        await Assertions.Expect(SearchInput).ToBeEnabledAsync();
         await SearchInput.FocusAsync();
         return this;
     }
 
     public async Task<HeaderComponents> FillSearch(string text)
     {
-        await FillAsync(SearchInput, text);
+        await FillAsync(SearchInput, text, "Search Input");
         return this;
     }
 
     public async Task<HeaderComponents> ClearSearch()
     {
-        await Expect(SearchInput).ToBeVisibleAsync();
-        await Expect(SearchInput).ToBeEnabledAsync();
+        await AssertVisibleAsync(SearchInput, "Search Input");
+        await Assertions.Expect(SearchInput).ToBeEnabledAsync();
         await SearchInput.ClearAsync();
         return this;
     }
@@ -112,47 +102,47 @@ public class HeaderComponents : BasePage
     // Search Verifications
     public async Task<HeaderComponents> VerifySearchVisible()
     {
-        await Expect(SearchInput).ToBeVisibleAsync();
-        await Expect(SearchIcon).ToBeVisibleAsync();
+        await AssertVisibleAsync(SearchInput, "Search Input");
+        await AssertVisibleAsync(SearchIcon, "Search Icon");
         return this;
     }
 
     public async Task<HeaderComponents> VerifySearchEnabled()
     {
-        await Expect(SearchInput).ToBeEnabledAsync();
+        await Assertions.Expect(SearchInput).ToBeEnabledAsync();
         return this;
     }
 
     public async Task<HeaderComponents> VerifyPlaceholder(string expectedPlaceholder)
     {
-        await Expect(SearchInput).ToHaveAttributeAsync("placeholder", expectedPlaceholder);
+        await Assertions.Expect(SearchInput).ToHaveAttributeAsync("placeholder", expectedPlaceholder);
         return this;
     }
 
     public async Task<HeaderComponents> VerifyInputType(string expectedType)
     {
-        await Expect(SearchInput).ToHaveAttributeAsync("type", expectedType);
+        await Assertions.Expect(SearchInput).ToHaveAttributeAsync("type", expectedType);
         return this;
     }
 
     public async Task<HeaderComponents> VerifySearchValue(string expectedValue)
     {
-        await Expect(SearchInput).ToHaveValueAsync(expectedValue);
+        await Assertions.Expect(SearchInput).ToHaveValueAsync(expectedValue);
         return this;
     }
 
     // Search Results Actions and Verifications
     public async Task<HeaderComponents> VerifyResultsVisible()
     {
-        await Expect(SearchResultsContainer).ToBeVisibleAsync();
+        await AssertVisibleAsync(SearchResultsContainer, "Search Results Container");
         return this;
     }
 
     public async Task<HeaderComponents> VerifyNoResults()
     {
-        await Expect(SearchResultsContainer).ToBeVisibleAsync();
-        await Expect(NoResultsMessage).ToBeVisibleAsync();
-        await Expect(NoResultsMessage).ToContainTextAsync("We couldn't find any events");
+        await AssertVisibleAsync(SearchResultsContainer, "Search Results Container");
+        await AssertVisibleAsync(NoResultsMessage, "No Results Message");
+        await Assertions.Expect(NoResultsMessage).ToContainTextAsync("We couldn't find any events");
         return this;
     }
 
@@ -176,6 +166,6 @@ public class HeaderComponents : BasePage
     {
         await VerifyResultsVisible();
         var firstResult = SearchResultsRows.First;
-        await ClickAsync(firstResult);
+        await ClickAsync(firstResult, "First Search Result");
     }
 }

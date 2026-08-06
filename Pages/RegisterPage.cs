@@ -20,18 +20,21 @@ public class RegisterPage : BasePage
 
     private ILocator LastName => Page.Locator("#last_name");
 
+    private ILocator Password => Page.Locator("#password");
+
     private ILocator RepeatPassword => Page.Locator("#password_repeat");
  
     private ILocator ContinueButton =>
-
         Page.Locator("button[type='submit']");
  
-    
-        public async Task ClickContinue()
+    private ILocator ErrorMessage => 
+        Page.Locator("div.uk-alert-danger > p");
+
+    public async Task ClickContinue()
 
     {
 
-        await ClickAsync(ContinueButton);
+        await ClickAsync(ContinueButton, "Continue button");
 
     }
 
@@ -49,17 +52,17 @@ public class RegisterPage : BasePage
 
     {
 
-        await FillAsync(Email, email);
+        await FillAsync(Email, email, "Email field");
 
-        await FillAsync(FirstName, firstName);
+        await FillAsync(FirstName, firstName, "First name field");
 
-        await FillAsync(LastName, lastName);
+        await FillAsync(LastName, lastName, "Last name field");
 
-        await FillAsync(Password, password);
+        await FillAsync(Password, password, "Password field");
 
-        await FillAsync(RepeatPassword, repeatPassword ?? password);
+        await FillAsync(RepeatPassword, repeatPassword ?? password, "Repeat password field");
  
-        await ClickAsync(ContinueButton);
+        await ClickAsync(ContinueButton, "Continue button");
 
     }
  
@@ -71,5 +74,16 @@ public class RegisterPage : BasePage
 //         "Test",
 //         "Test123!"
 //     );
+
+    public async Task VerifyEmailValue(string expectedEmail)
+    {
+        await Assertions.Expect(Email).ToHaveValueAsync(expectedEmail);
+    }
+
+    public async Task VerifyErrorMessageContains(string expectedMessage)
+    {
+        await AssertVisibleAsync(ErrorMessage, "Error message");
+        await Assertions.Expect(ErrorMessage).ToContainTextAsync(expectedMessage);
+    }
 }
  

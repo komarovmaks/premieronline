@@ -39,53 +39,53 @@ public class LoginPage : BasePage
 
     public async Task LoginUser(string email, string password)
     {
-        await FillAsync(Email, email);
-        await FillAsync(Password, password);
-        await ClickAsync(SignInButton);
+        await FillAsync(Email, email, "Email field");
+        await FillAsync(TogglePassword, password, "Password field");
+        await ClickAsync(SignInButton, "Sign in button");
     }
 
     public async Task FillEmail(string email)
     {
-        await FillAsync(Email, email);
+        await FillAsync(Email, email, "Email field");
     }
 
     public async Task FillPassword(string password)
     {
-        await FillAsync(Password, password);
+        await FillAsync(TogglePassword, password, "Password field");
     }
 
     public async Task ClickSignIn()
     {
-        await ClickAsync(SignInButton);
+        await ClickAsync(SignInButton, "Sign in button");
     }
 
     public async Task TogglePasswordVisibility()
     {
-        await ClickAsync(TogglePassword);
+        await ClickAsync(TogglePassword, "Toggle password visibility button");
     }
 
     public async Task ClickForgotPassword()
     {
-        await ClickAsync(ForgotPasswordLink);
+        await ClickAsync(ForgotPasswordLink, "Forgot your password? link");
     }
 
     public async Task ClickCreateAccount()
     {
-        await ClickAsync(CreateAccountLink);
+        await ClickAsync(CreateAccountLink, "Create Account link");
     }
 
     public async Task ClickRegisterAsGuest()
     {
-        await ClickAsync(RegisterAsGuestLink);
+        await ClickAsync(RegisterAsGuestLink, "Register as a Guest link");
     }
 
     public async Task VerifyLoginPage()
     {
-        await Expect(Email).ToBeVisibleAsync();
-        await Expect(Password).ToBeVisibleAsync();
-        await Expect(SignInButton).ToBeVisibleAsync();
-        await Expect(ForgotPasswordLink).ToBeVisibleAsync();
-        await Expect(CreateAccountLink).ToBeVisibleAsync();
-        await Expect(RegisterAsGuestLink).ToBeVisibleAsync();
+        await Assertions.Expect(Email).ToBeVisibleAsync();
+        await Assertions.Expect(TogglePassword).ToBeVisibleAsync();
+        await Assertions.Expect(SignInButton).ToBeVisibleAsync();
+        await Assertions.Expect(ForgotPasswordLink).ToBeVisibleAsync();
+        await Assertions.Expect(CreateAccountLink).ToBeVisibleAsync();
+        await Assertions.Expect(RegisterAsGuestLink).ToBeVisibleAsync();
     }
 }

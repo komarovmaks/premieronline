@@ -28,9 +28,7 @@ public class HomeTests : BaseTest
         await Expect(signIn).ToBeEnabledAsync();
 
 
-        var createAccount = Page.Locator("a:has-text('Create Account')").Nth(0);
-        await Expect(createAccount).ToBeVisibleAsync();
-        await Expect(createAccount).ToBeEnabledAsync();      
+        await homePage.VerifyCreateAccountVisible();
                 
     }
 
@@ -69,14 +67,13 @@ public class HomeTests : BaseTest
             "Password123!");
 
         Assert.That(Page.Url, Is.EqualTo("https://www.premieronline.com/action/register"));
-        Assert.That(await Page.Locator("#email").InputValueAsync(), Is.EqualTo("invalid-email"));
+        await register.VerifyEmailValue("invalid-email");
     }
 
     [Test]
     public async Task RegisterWithShortPassword_Negative()
     {
         var register = new Pages.RegisterPage(Page);
-        var errorMessage = Page.Locator("div.uk-alert-danger > p");
 
         await Page.GotoAsync("https://www.premieronline.com/action/register");
 
@@ -87,14 +84,13 @@ public class HomeTests : BaseTest
             "Short1");
 
         Assert.That(Page.Url, Is.EqualTo("https://www.premieronline.com/create_profile.php"));
-        Assert.That(await errorMessage.TextContentAsync(), Does.Contain("Your password must be at least 8 characters long."));
+        await register.VerifyErrorMessageContains("Your password must be at least 8 characters long.");
     }
 
     [Test]
     public async Task RegisterWithMismatchedPasswords_Negative()
     {
         var register = new Pages.RegisterPage(Page);
-        var errorMessage = Page.Locator("div.uk-alert-danger > p");
 
         await Page.GotoAsync("https://www.premieronline.com/action/register");
 
@@ -106,6 +102,6 @@ public class HomeTests : BaseTest
             "Password1234!");
 
         Assert.That(Page.Url, Is.EqualTo("https://www.premieronline.com/create_profile.php"));
-        Assert.That(await errorMessage.TextContentAsync(), Does.Contain("Your passwords don't match."));
+        await register.VerifyErrorMessageContains("Your passwords don't match.");
     }
 }

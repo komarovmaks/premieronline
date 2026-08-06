@@ -14,11 +14,9 @@ public class HomePage : BasePage
 
     }
  
-    private ILocator Logo =>
 
-        Page.GetByAltText("Premiere Online");
- 
-
+    public ILocator SignIn => 
+        Page.GetByRole(AriaRole.Link, new() { Name = "Sign in" });
     // private ILocator Events =>
 
     //     Page.GetByRole(AriaRole.Link, new() { Name = "Events" });
@@ -44,21 +42,14 @@ public class HomePage : BasePage
     }
  
     public async Task VerifyHomePage()
-
     {
-
-        await Expect(Page).ToHaveURLAsync(Url);
+        await Assertions.Expect(Page).ToHaveURLAsync(Url);
  
-        await Expect(Page).ToHaveTitleAsync(
-
+        await Assertions.Expect(Page).ToHaveTitleAsync(
             "Premier Online - leading provider of online event registration for sports events");
  
-        // await Expect(Logo).ToBeVisibleAsync();
- 
-        await Expect(SignIn).ToBeVisibleAsync();
-
-        await Expect(SignIn).ToBeEnabledAsync();
- 
+        await AssertVisibleAsync(SignIn, "Sign In link");
+        await Assertions.Expect(SignIn).ToBeEnabledAsync();
         // await Expect(Events).ToBeVisibleAsync();
 
         // await Expect(Events).ToBeEnabledAsync();
@@ -73,12 +64,15 @@ public class HomePage : BasePage
 
     }
  
-    public async Task ClickCreateAccount()
-
+    public async Task VerifyCreateAccountVisible()
     {
+        await AssertVisibleAsync(CreateAccount, "Create Account button");
+        await Assertions.Expect(CreateAccount).ToBeEnabledAsync();
+    }
 
-        await ClickAsync(CreateAccount);
-
+    public async Task ClickCreateAccount()
+    {
+        await ClickAsync(CreateAccount, "Create Account button");
     }
 
 }
