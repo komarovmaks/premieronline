@@ -1,6 +1,4 @@
 using Microsoft.Playwright;
-
-//using Microsoft.Playwright.Assertions;
  
 namespace Tests.Pages;
  
@@ -66,14 +64,7 @@ public class RegisterPage : BasePage
 
     }
  
-//  [Test]
 
-//  await register.RegisterUser(
-//         $"test{Guid.NewGuid():N}@mailinator.com",
-//         "Max",
-//         "Test",
-//         "Test123!"
-//     );
 
     public async Task VerifyEmailValue(string expectedEmail)
     {
