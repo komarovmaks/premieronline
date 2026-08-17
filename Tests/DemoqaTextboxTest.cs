@@ -11,7 +11,7 @@ public class DemoqaTextboxTests : BaseTest
 {
     var textbox = new Pages.DemoqaTextboxPage(Page);
  
-    await Page.GotoAsync("https://demoqa.com/text-box");
+    await textbox.NavigateAsync("https://demoqa.com/text-box");
  
     await textbox.EnterValues(
         

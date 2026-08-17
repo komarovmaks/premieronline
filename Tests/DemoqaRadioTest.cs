@@ -11,7 +11,7 @@ public class DemoqaRadioTests : BaseTest
 {
     var radio = new Pages.DemoqaRadioPage(Page);
  
-    await Page.GotoAsync("https://demoqa.com/radio-button");
+    await radio.NavigateAsync("https://demoqa.com/radio-button");
  
     await radio.ClickYesRadio();
  
@@ -28,7 +28,7 @@ public class DemoqaRadioTests : BaseTest
 {
     var radio = new Pages.DemoqaRadioPage(Page);
  
-    await Page.GotoAsync("https://demoqa.com/radio-button");
+    await radio.NavigateAsync("https://demoqa.com/radio-button");
  
     await radio.ClickImpressiveRadio();
  

@@ -11,7 +11,7 @@ public class DemoqaCheckboxTests : BaseTest
 {
     var checkbox = new Pages.DemoqaCheckboxPage(Page);
  
-    await Page.GotoAsync("https://demoqa.com/checkbox");
+    await checkbox.NavigateAsync("https://demoqa.com/checkbox");
  
     await checkbox.ClickCheckbox();
  

@@ -122,7 +122,7 @@ public class BasePage
 
     }
  
-    protected async Task NavigateAsync(string url)
+    public async Task NavigateAsync(string url)
 
     {
 

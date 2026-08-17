@@ -10,7 +10,7 @@ public class DemoqaWebtablesTests : BaseTest
     public async Task AddNewRecord()
     {
         var webtables = new Pages.DemoqaWebtablesPage(Page);
-        await Page.GotoAsync("https://demoqa.com/webtables");
+        await webtables.NavigateAsync("https://demoqa.com/webtables");
 
         var random = new Random();
         string firstName = "Test" + random.Next(1000, 9999);
@@ -27,7 +27,7 @@ public class DemoqaWebtablesTests : BaseTest
     public async Task EditRecord()
     {
         var webtables = new Pages.DemoqaWebtablesPage(Page);
-        await Page.GotoAsync("https://demoqa.com/webtables");
+        await webtables.NavigateAsync("https://demoqa.com/webtables");
 
         string originalName = "Alden"; // Default record on the page
         string editedName = "AldenEdited";
@@ -42,7 +42,7 @@ public class DemoqaWebtablesTests : BaseTest
     public async Task DeleteRecord()
     {
         var webtables = new Pages.DemoqaWebtablesPage(Page);
-        await Page.GotoAsync("https://demoqa.com/webtables");
+        await webtables.NavigateAsync("https://demoqa.com/webtables");
 
         string recordToDelete = "Kierra"; // Default record on the page
         
@@ -56,7 +56,7 @@ public class DemoqaWebtablesTests : BaseTest
     public async Task SearchRecord()
     {
         var webtables = new Pages.DemoqaWebtablesPage(Page);
-        await Page.GotoAsync("https://demoqa.com/webtables");
+        await webtables.NavigateAsync("https://demoqa.com/webtables");
 
         string searchName = "Cierra"; // Default record on the page
         await webtables.SearchRecord(searchName);
